@@ -1,1 +1,8 @@
-Hi
+Option 1
+Storage Layer - Postgres 
+Indexing - ElasticSearch
+
+
+Option 2
+Storage Layer - Redis
+Cache and Index and Queues - Postgres
