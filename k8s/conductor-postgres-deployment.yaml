@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose-po-es7.yaml
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: conductor-postgres
+  name: conductor-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: conductor-postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose-po-es7.yaml
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/internal: "true"
+        io.kompose.service: conductor-postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_PASSWORD
+              value: conductor
+            - name: POSTGRES_USER
+              value: conductor
+          image: postgres
+          livenessProbe:
+            exec:
+              command:
+                - timeout 5 bash -c 'cat < /dev/null > /dev/tcp/localhost/5432'
+            failureThreshold: 12
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: conductor-postgres
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pgdata-conductor
+      restartPolicy: Always
+      volumes:
+        - name: pgdata-conductor
+          persistentVolumeClaim:
+            claimName: pgdata-conductor
+status: {}

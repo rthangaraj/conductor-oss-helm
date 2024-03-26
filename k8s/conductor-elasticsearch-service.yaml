@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose-po-es7.yaml
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: conductor-elasticsearch
+  name: conductor-elasticsearch
+spec:
+  ports:
+    - name: "9201"
+      port: 9201
+      targetPort: 9200
+  selector:
+    io.kompose.service: conductor-elasticsearch
+status:
+  loadBalancer: {}

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose-po-es7.yaml
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: conductor-postgres
+  name: conductor-postgres
+spec:
+  ports:
+    - name: "6432"
+      port: 6432
+      targetPort: 5432
+  selector:
+    io.kompose.service: conductor-postgres
+status:
+  loadBalancer: {}
